@@ -73,7 +73,13 @@ public class JwtAuthorizationFilter implements GlobalFilter, Ordered {
             "/health-check",
             "/api/summarize-service/health-check",
             "/api/matching-service/health-check",
-            "/api/alarm-service/health-check"
+            "/api/alarm-service/health-check",
+            "/api/blog-service/posts/trending",
+            "/swagger/blog-service/swagger-ui/",
+            "/swagger/blog-service/swagger-ui/index.html",
+            "/swagger/blog-service/v3/api-docs"
+
+
     );
 
     private boolean isPublic(String path) {
