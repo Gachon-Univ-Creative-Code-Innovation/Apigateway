@@ -1,0 +1,17 @@
+
+
+spring:
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      uri: http://config-service.config.svc.cluster.local:8888
+#      uri: http://localhost:8888
+      name: apigateway-service
+      label: main
+      fail-fast: true
+  application:
+    name: apigateway-service
+  profiles:
+    active: cloud
+
