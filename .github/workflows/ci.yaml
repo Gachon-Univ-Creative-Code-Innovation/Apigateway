@@ -1,0 +1,54 @@
+name: APIGateway CI - Build, Push, and Trigger CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-push-trigger:
+    name: Build, Push APIGateway Image, and Trigger Jenkins CD
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: msj9965/alog-apigateway # APIGateway 이미지 이름
+          tags: | # 태그 전략: main, latest, sha-short
+            type=raw,value=main,enable={{is_default_branch}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix=sha-,format=short
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile # APIGateway 레포지토리의 Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Trigger Jenkins CD Pipeline for APIGateway
+        if: success()
+        env:
+          JENKINS_URL: ${{ secrets.JENKINS_URL }}
+          JENKINS_JOB_NAME: ${{ secrets.JENKINS_JOB_NAME_GATEWAY }} # APIGateway용 Jenkins 작업 이름 Secret
+          JENKINS_TRIGGER_TOKEN: ${{ secrets.JENKINS_TRIGGER_TOKEN_GATEWAY }} # APIGateway용 Jenkins 트리거 토큰 Secret
+          JENKINS_USER_ID: ${{ secrets.JENKINS_USER_ID }}
+          JENKINS_USER_API_TOKEN: ${{ secrets.JENKINS_USER_API_TOKEN }}
+          # Jenkins에 전달할 이미지 태그 (여기서는 'main' 태그를 사용)
+          IMAGE_TO_DEPLOY_TAG: main
+        run: |
+          echo "Triggering Jenkins job: '${JENKINS_JOB_NAME}' for APIGateway with image tag: '${IMAGE_TO_DEPLOY_TAG}'"
+          curl -X POST -u "${JENKINS_USER_ID}:${JENKINS_USER_API_TOKEN}" \
+            "${JENKINS_URL}/job/${JENKINS_JOB_NAME}/buildWithParameters?token=${JENKINS_TRIGGER_TOKEN}&IMAGE_TAG=${IMAGE_TO_DEPLOY_TAG}"
