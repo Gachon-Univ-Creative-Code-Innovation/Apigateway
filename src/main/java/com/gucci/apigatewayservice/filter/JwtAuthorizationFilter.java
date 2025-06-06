@@ -80,7 +80,9 @@ public class JwtAuthorizationFilter implements GlobalFilter, Ordered {
             "/swagger/blog-service/v3/api-docs",
             "/api/github-service/health-check",
             "/api/user-service/details",
-            "/api/user-service/profile-nickname"
+            "/api/user-service/profile-nickname",
+            "/api/blog-service/health-check",
+            "/api/portfolio-service/health-check"
 
 
     );
