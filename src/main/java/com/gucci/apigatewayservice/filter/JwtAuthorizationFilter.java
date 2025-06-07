@@ -59,6 +59,7 @@ public class JwtAuthorizationFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
 
+    // List of public paths that do not require JWT authentication
     private static final List<String> PUBLIC_PATHS = List.of(
             "/api/user-service/signin",
             "/api/user-service/signup",
