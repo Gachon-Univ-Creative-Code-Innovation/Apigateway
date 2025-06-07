@@ -84,13 +84,15 @@ public class JwtAuthorizationFilter implements GlobalFilter, Ordered {
             "/api/user-service/profile-nickname",
             "/api/blog-service/health-check",
             "/api/portfolio-service/health-check",
-            "/api/message-service/health-check",
-            "/ws/**"
+            "/api/message-service/health-check"
 
 
     );
 
     private boolean isPublic(String path) {
+        if (path.startsWith("/ws/") || path.equals("/ws")) {
+            return true;
+        }
         return PUBLIC_PATHS.stream().anyMatch(path::startsWith);
     }
 
