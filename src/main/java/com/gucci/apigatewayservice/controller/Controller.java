@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 public class Controller {
 
     private final Environment environment;
-
+//헬스 체크
     @GetMapping("/health-check")
     public Mono<String> healthCheck() {
         log.info("✅ health-check endpoint hit!");
