@@ -86,7 +86,9 @@ public class JwtAuthorizationFilter implements GlobalFilter, Ordered {
             "/api/portfolio-service/health-check",
             "/api/message-service/health-check",
             "/api/roadmap/health-check",
-            "/api/alarm-service/notifications/subscribe"
+            "/api/alarm-service/notifications/subscribe",
+            "/api/blog-service/comment/",
+            "/api/blog-service/posts/"
 
 
     );
