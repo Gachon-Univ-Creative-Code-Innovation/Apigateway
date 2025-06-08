@@ -90,7 +90,10 @@ public class JwtAuthorizationFilter implements GlobalFilter, Ordered {
             "/api/blog-service/comment/",
             "/api/blog-service/posts/",
             "/api/blog-service/comments/",
-            "/api/blog-service/posts/user/"
+            "/api/blog-service/posts/user/",
+            "/api/user-service/follow/followees/",
+            "/api/user-service/follow/followers/"
+
 
 
     );
